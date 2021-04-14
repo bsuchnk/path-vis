@@ -1,20 +1,20 @@
 package main
 
 import (
-	"image/color"
-
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
-type Game struct{}
+type Game struct {
+	board Board
+}
 
 func (g *Game) Update() error {
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	ebitenutil.DrawLine(screen, 10, 10, 100, 100, color.RGBA{123, 43, 0, 255})
+	g.board.draw(screen)
+	//ebitenutil.DrawLine(screen, 10, 10, 100, 100, color.RGBA{123, 43, 0, 255})
 }
 
 func (g *Game) Layout(oustideWidth, outsideHeight int) (screenWidth, screenHeight int) {
@@ -23,8 +23,10 @@ func (g *Game) Layout(oustideWidth, outsideHeight int) (screenWidth, screenHeigh
 
 func main() {
 	ebiten.SetWindowSize(640, 480)
-	ebiten.SetWindowTitle("title")
+	ebiten.SetWindowTitle("PathVis")
 	game := &Game{}
+	game.board = *newBoard()
+	game.board.bfs()
 	if err := ebiten.RunGame(game); err != nil {
 		panic(err)
 	}
