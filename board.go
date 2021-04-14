@@ -31,9 +31,9 @@ type Board struct {
 func newBoard() *Board {
 	out := new(Board)
 
-	//square grid 7x7:
-	w := 7
-	h := 7
+	//square grid:
+	w := 12
+	h := 9
 
 	nodes := make([][]Node, w)
 	for i := range nodes {
@@ -42,8 +42,8 @@ func newBoard() *Board {
 
 	for i := 0; i < w; i++ {
 		for j := 0; j < h; j++ {
-			nodes[i][j].y = float64(j * 480 / (h + 5))
-			nodes[i][j].x = float64(i * 640 / (w + 5))
+			nodes[i][j].y = float64((j + 1) * 480 / (h + 1))
+			nodes[i][j].x = float64((i + 1) * 640 / (w + 1))
 		}
 	}
 
@@ -65,7 +65,7 @@ func newBoard() *Board {
 	}
 
 	nodes[2][3].start = true
-	nodes[5][5].end = true
+	nodes[9][7].end = true
 
 	for i := 0; i < w; i++ {
 		for j := 0; j < h; j++ {
@@ -112,7 +112,7 @@ func (n *Node) draw(screen *ebiten.Image) {
 	case n.end:
 		col = color.RGBA{0, 0, 255, 255}
 	default:
-		col = color.RGBA{255, 0, 0, 255}
+		col = color.RGBA{96, 64, 96, 255}
 	}
 
 	ebitenutil.DrawRect(screen, n.x-r, n.y-r, r*2, r*2, col)
@@ -152,5 +152,27 @@ func (b *Board) bfs() {
 				}
 			}
 		}
+	}
+}
+
+func (n *Node) containsPoint(x, y int) bool {
+	dx := (x - int(n.x)) * (x - int(n.x))
+	dy := (y - int(n.y)) * (y - int(n.y))
+	return dx*dx+dy*dy <= 128*128
+}
+
+func (b *Board) click() {
+	for _, node := range b.nodes {
+		x, y := ebiten.CursorPosition()
+		if node.containsPoint(x, y) {
+			node.block = !node.block
+		}
+	}
+}
+
+func (b *Board) clearNodes() {
+	for _, n := range b.nodes {
+		n.path = false
+		n.step = 0
 	}
 }
