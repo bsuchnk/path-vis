@@ -15,8 +15,12 @@ func (g *Game) Update() error {
 	}
 
 	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonRight) {
-		g.board.clearNodes()
-		g.board.bfs()
+		if g.board.cleared {
+			g.board.bfs()
+			g.board.cleared = false
+		} else {
+			g.board.clearNodes()
+		}
 	}
 
 	return nil
