@@ -2,7 +2,7 @@
 
 *Work in progress.*
 
-![debug4](https://user-images.githubusercontent.com/75221970/114776969-64085680-9d73-11eb-9e8d-034297ccda17.png)
+![debug7](https://user-images.githubusercontent.com/75221970/114860141-e92f5200-9deb-11eb-94ff-1893d25d7a7b.png)
 
 ## Tools used
 - Go
